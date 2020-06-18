@@ -1,0 +1,3 @@
+[v3_req]
+keyUsage          = keyEncipherment, dataEncipherment
+extendedKeyUsage  = serverAuth

@@ -33,30 +33,28 @@ domain_list=$(cat $keys_folder/$name/csr.meta)
 
 echo "Signing RSA key"
 
-docker run \
-	--rm -it \
-	-v `pwd`/cloudflare.ini:/cloudflare.ini \
-	-v `pwd`/$keys_folder/$name/certbot:/etc/letsencrypt \
-	-v `pwd`/$keys_folder/$name:/data \
-	certbot/dns-cloudflare certonly \
-	--dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini \
-	--csr /data/rsa.csr \
-	--cert-path /data/rsa.letsencrypt.crt \
-	--chain-path /data/rsa.letsencrypt.chain.crt \
-	--fullchain-path /data/rsa.letsencrypt.fullchain.crt \
+certbot certonly \
+	--dns-cloudflare \
+	--dns-cloudflare-credentials cloudflare.ini \
+	--csr $keys_folder/$name/rsa.csr \
+	--cert-path $keys_folder/$name/rsa.letsencrypt.crt \
+	--chain-path $keys_folder/$name/rsa.letsencrypt.chain.crt \
+	--fullchain-path $keys_folder/$name/rsa.letsencrypt.fullchain.crt \
+	--config-dir $keys_folder/$name/certbot/config \
+	--work-dir $keys_folder/$name/certbot/work \
+	--logs-dir $keys_folder/$name/certbot/logs \
 	-d $domain_list
 
 echo "Signing EC key"
 
-docker run \
-	--rm -it \
-	-v `pwd`/cloudflare.ini:/cloudflare.ini \
-	-v `pwd`/$keys_folder/$name/certbot:/etc/letsencrypt \
-	-v `pwd`/$keys_folder/$name:/data \
-	certbot/dns-cloudflare certonly \
-	--dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini \
-	--csr /data/ec.csr \
-	--cert-path /data/ec.letsencrypt.crt \
-	--chain-path /data/ec.letsencrypt.chain.crt \
-	--fullchain-path /data/ec.letsencrypt.fullchain.crt \
+certbot certonly \
+	--dns-cloudflare \
+	--dns-cloudflare-credentials cloudflare.ini \
+	--csr $keys_folder/$name/ec.csr \
+	--cert-path $keys_folder/$name/ec.letsencrypt.crt \
+	--chain-path $keys_folder/$name/ec.letsencrypt.chain.crt \
+	--fullchain-path $keys_folder/$name/ec.letsencrypt.fullchain.crt \
+	--config-dir $keys_folder/$name/certbot/config \
+	--work-dir $keys_folder/$name/certbot/work \
+	--logs-dir $keys_folder/$name/certbot/logs \
 	-d $domain_list

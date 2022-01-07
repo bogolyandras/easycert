@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 . ./config.sh
 
 if [ ! -d $keys_folder ]
@@ -8,12 +10,12 @@ then
     exit 1
 fi
 
-if [ -z $1 ]
+if [ -z ${1:-} ]
 then
     echo "Please enter a name for the key: "
     read name
 else
-    name=$1
+    name=${1:-}
 fi
 
 echo "Using name $name"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Generates
 # - RSA and EC private keys
 # - Correspoinding Certificate signing requests
@@ -11,12 +13,12 @@ then
     mkdir $keys_folder
 fi
 
-if [ -z $1 ]
+if [ -z ${1:-} ]
 then
     echo "Please enter a name for the key: "
     read name
 else
-    name=$1
+    name=${1:-}
 fi
 
 echo "Using name $name"
@@ -32,11 +34,13 @@ mkdir $keys_folder/$name
 openssl genrsa -out  $keys_folder/$name/rsa.key 2048
 openssl ecparam -genkey -name prime256v1 -out $keys_folder/$name/ec.key
 
-echo "Please define common name"
+echo "Please define common name (example.com)"
 read common_name
 
 alternative_names=()
-echo "Please define alternative names"
+echo "Please define alternative names in separate lines if applicable, otherwise press enter"
+echo "After the last alternative name definition, please input an empty line"
+echo "(*.example.com)"
 while read line
 do
     if [ -z $line ]
@@ -77,7 +81,6 @@ else
         printf "$alternative_name" >> $keys_folder/$name/csr.meta
         i=$((i+1))
     done
-
 fi
 
 openssl req -new \

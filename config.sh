@@ -1,1 +1,1 @@
-keys_folder="keys"
+readonly keys_folder="keys"
